@@ -5,8 +5,6 @@ A simple RESTful API built with Express.js for managing blog posts, comments, an
 ## Features
 
 - Create, read, update, and delete blog posts
-- Manage user accounts and authentication
-- Add and retrieve comments for posts
 - JSON-based API responses
 
 ## Tech Stack
@@ -30,7 +28,7 @@ A simple RESTful API built with Express.js for managing blog posts, comments, an
 git clone https://github.com/revxcode/bloogs-api.git
 
 # Go to the project directory
-cd blog-api
+cd bloogs-api
 
 # Install dependencies
 npm install
