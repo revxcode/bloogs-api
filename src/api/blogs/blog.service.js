@@ -1,44 +1,44 @@
 // business logic
 // internal validation
 
-import supabase from "../utils/supabase/index.js";
+import { createSupabase } from "../../utils/supabase.js";
 
 const getAllPost = async () => {
-  const { data, error } = await supabase
+  const { data, error } = await createSupabase()
     .from('posts')
     .select('*')
     .order('created_at', { ascending: false });
 
-  if (error) throw new Error(...error);
+  if (error) throw new Error(error.message);
 
   return data
 };
 
 const getUniquePost = async (postId) => {
-  const { data, error } = await supabase
+  const { data, error } = await createSupabase()
     .from('posts')
     .select("*")
     .eq('id', postId);
 
   if (data.length <= 0) throw new Error("Post not found.");
 
-  if (error) throw new Error(...error);
+  if (error) throw new Error(error.message);
 
   return data
 }
 
 const addPost = async (postData) => {
   const time = new Date();
-  const { data, error } = await supabase
+  const { data, error } = await createSupabase()
     .from('posts')
     .insert({
       ...postData,
       created_at: time.toISOString(),
       updated_at: time.toISOString()
     })
-    .select()
+    .select();
 
-  if (error) throw new Error(...error);
+  if (error) throw new Error(error.message);
 
   return data;
 };
@@ -58,7 +58,7 @@ const editPost = async (postId, postData) => {
 
   if (isAllSame) throw new Error("No data changes.");
 
-  const { data, error } = await supabase
+  const { data, error } = await createSupabase()
     .from('posts')
     .update({
       ...postData,
@@ -67,13 +67,15 @@ const editPost = async (postId, postData) => {
     .eq('id', postId)
     .select();
 
-  if (error) throw new Error(...error);
+  if (error) throw new Error(error.message);
 
   return data;
 };
 
 const removePost = async (postId) => {
-  const { error } = await supabase
+  await getUniquePost(postId);
+
+  const { error } = await createSupabase()
     .from('posts')
     .delete()
     .eq('id', postId);
